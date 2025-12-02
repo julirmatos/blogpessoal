@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe } from '@nestjs/common';
 import { Postagem } from '../entities/postagem.entity';
 import { PostagemService } from '../services/postagem.service';
 
@@ -11,6 +11,11 @@ export class PostagemController {
     @HttpCode(HttpStatus.OK) //define status code para respostas
     findAll(): Promise<Postagem[]> {
         return this.postagemService.findAll();
+    }
+    @Get('/:id') // buscar postagem por id
+    @HttpCode(HttpStatus.OK)
+    findById(@Param('id', ParseIntPipe) id: number): Promise<Postagem> {
+        return this.postagemService.findById(id);
     }
 }
 

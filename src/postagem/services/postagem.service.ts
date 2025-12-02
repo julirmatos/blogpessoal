@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Postagem } from '../entities/postagem.entity';
@@ -13,5 +13,14 @@ export class PostagemService {
 
     async findAll(): Promise<Postagem[]> {
         return await this.postagemRepository.find();
+    }
+
+    async findById(id: number): Promise<Postagem> {
+
+        const postagem = await this.postagemRepository.findOneBy({ id });
+        if (!postagem) {
+            throw new HttpException('Postagem não Encontrada', HttpStatus.NOT_FOUND);
+        }
+        return postagem;
     }
 }
