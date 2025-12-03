@@ -1,0 +1,13 @@
+/* eslint-disable prettier/prettier */
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Tema } from "./tema.entity";
+import { TemaService } from "../services/tema.services";
+import { TemaController } from "../controllers/tema.controller";
+@Module({
+    imports: [TypeOrmModule.forFeature([Tema])],
+    providers: [TemaService],
+    controllers: [TemaController],
+    exports: [TemaService],
+})
+export class TemaModule { }

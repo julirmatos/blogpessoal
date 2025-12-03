@@ -12,15 +12,27 @@ export class PostagemService {
     ) { }
 
     async findAll(): Promise<Postagem[]> {
-        return await this.postagemRepository.find();
+        return await this.postagemRepository.find({
+            relations: {
+                tema: true
+            }
+        });
     }
 
     async findById(id: number): Promise<Postagem> {
 
-        const postagem = await this.postagemRepository.findOneBy({ id });
-        if (!postagem) {
-            throw new HttpException('Postagem não Encontrada', HttpStatus.NOT_FOUND);
-        }
+        const postagem = await this.postagemRepository.findOne({
+            where: {
+                id
+            },
+            relations: {
+                tema: true
+            }
+        });
+
+        if (!postagem)
+            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
+
         return postagem;
     }
 
