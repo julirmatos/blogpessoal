@@ -1,8 +1,9 @@
+/* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, ILike, Repository } from 'typeorm';
-import { Tema } from '../entities/tema.entity';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DeleteResult, ILike, Repository } from "typeorm";
+import { Tema } from "../entities/tema.entity";
 
 @Injectable()
 export class TemaService {
@@ -20,7 +21,8 @@ export class TemaService {
     }
 
     async findById(id: number): Promise<Tema> {
-        const tema = await this.temaRepository.findOne({
+
+        let tema = await this.temaRepository.findOne({
             where: {
                 id
             },
@@ -35,7 +37,7 @@ export class TemaService {
         return tema;
     }
 
-    async findAllByDescricao(descricao: string): Promise<Tema[]> {
+    async findByDescricao(descricao: string): Promise<Tema[]> {
         return await this.temaRepository.find({
             where: {
                 descricao: ILike(`%${descricao}%`)
@@ -52,14 +54,20 @@ export class TemaService {
 
     async update(tema: Tema): Promise<Tema> {
 
-        await this.findById(tema.id);
+        let buscaTema = await this.findById(tema.id);
+
+        if (!buscaTema || !tema.id)
+            throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
 
         return await this.temaRepository.save(tema);
     }
 
     async delete(id: number): Promise<DeleteResult> {
 
-        await this.findById(id);
+        let buscaTema = await this.findById(id);
+
+        if (!buscaTema)
+            throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
 
         return await this.temaRepository.delete(id);
 
