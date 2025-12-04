@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Postagem } from "./entities/postagem.entity";
@@ -12,13 +11,5 @@ import { TemaModule } from "../tema/tema.module";
     controllers: [PostagemController],
     providers: [PostagemService, TemaService],
     exports: [TypeOrmModule]
-})
-
-
-@Module({
-    imports: [TypeOrmModule.forFeature([Postagem]) ],
-    providers: [PostagemService],
-    controllers: [PostagemController],
-    exports: [],
 })
 export class PostagemModule { }

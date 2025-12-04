@@ -18,11 +18,9 @@ import { Tema } from './tema/entities/tema.entity';
       synchronize: true,
     }),
     PostagemModule,
-    // eslint-disable-next-line prettier/prettier
     TemaModule
   ],
   controllers: [],
   providers: [],
 })
-// eslint-disable-next-line prettier/prettier
 export class AppModule { }

@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable prettier/prettier */
- 
-/* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { PostagemService } from "../services/postagem.service";
 import { Postagem } from "../entities/postagem.entity";
@@ -39,7 +35,7 @@ export class PostagemController {
     @Post() // Usado quando queremos Cadastrar/Criar/Salva alguma informação
     @HttpCode(HttpStatus.CREATED)   // Monta a Resposa HTTP para o Cliente com o status 201
     create(@Body() postagem: Postagem): Promise<Postagem> {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        
         return this.postagemService.createPostagem(postagem);
     }
 
@@ -48,7 +44,7 @@ export class PostagemController {
     @Put()// Usado quando queremos Atualizar alguma informação
     @HttpCode(HttpStatus.OK) // Monta a Resposa HTTP para o Cliente com o status 200    
     update(@Body() postagem: Postagem): Promise<Postagem> {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+       
         return this.postagemService.updatePostagem(postagem);
     }
 

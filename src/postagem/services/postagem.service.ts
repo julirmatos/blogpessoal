@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable prettier/prettier */
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, ILike, Repository } from 'typeorm';
@@ -95,11 +93,11 @@ export class PostagemService {
         if (!buscaPostagem || !postagem.id) {
             throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
         }
-
+       
         if (postagem.tema) {
              
             let tema = await this.temaService.findById(postagem.tema.id)
-
+             console.log(tema);
             if (!tema) {
                 throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
             }
