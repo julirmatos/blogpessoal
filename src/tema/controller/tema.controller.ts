@@ -1,10 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable prettier/prettier */
+  
+ 
+ 
+ 
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { Tema } from "../entities/tema.entity";
-import { TemaService } from "./services/tema.service";
+import { TemaService } from "../services/tema.service"; // import { TemaService } from "../tema/services/tema.service";
 
 @Controller("/temas")
 export class TemaController {
@@ -13,7 +15,7 @@ export class TemaController {
     @Get()
     @HttpCode(HttpStatus.OK)
     findAll(): Promise<Tema[]> {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+         
         return this.temaService.findAll();
     }
 
@@ -27,14 +29,14 @@ export class TemaController {
     @Get('/descricao/:descricao')
     @HttpCode(HttpStatus.OK)
     findByDescricao(@Param('descricao') descricao: string): Promise<Tema[]> {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+         
         return this.temaService.findByDescricao(descricao);
     }
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
     create(@Body() Tema: Tema): Promise<Tema> {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+         
         return this.temaService.create(Tema);
     }
 

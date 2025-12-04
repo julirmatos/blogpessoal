@@ -4,7 +4,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, ILike, Repository } from 'typeorm';
 import { Postagem } from '../entities/postagem.entity';
-import { TemaService } from "./services/tema.service";
+import { TemaService } from "../../tema/services/tema.service"
 
 @Injectable() // classe pode ser inserida em outras classes
 export class PostagemService {
@@ -64,7 +64,7 @@ export class PostagemService {
         */
 
         if (postagem.tema) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+             
             let tema = await this.temaService.findById(postagem.tema.id)
 
             if (!tema) {
@@ -98,7 +98,7 @@ export class PostagemService {
         }
 
         if (postagem.tema) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+             
             let tema = await this.temaService.findById(postagem.tema.id)
 
             if (!tema) {
