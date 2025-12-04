@@ -16,7 +16,7 @@ import { TemaModule } from "../tema/tema.module";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Postagem])],
+    imports: [TypeOrmModule.forFeature([Postagem]) ],
     providers: [PostagemService],
     controllers: [PostagemController],
     exports: [],
