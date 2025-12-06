@@ -74,39 +74,36 @@ export class PostagemService {
     }
 
 
-    async updatePostagem(postagem: Postagem): Promise<Postagem> {
-        /*
-            {
-                "id": 1
-                "titulo": "",
-                "texto": "Texto da Postagem 3",
-                "tema": {
-                    "id": 1
-                }
-            }
-        */
+    async updatePostagem(id: number, postagem: Postagem): Promise<Postagem> {
 
-        // Chama o método findById anteriro para pesquisar uma postagem pelo id extraido do objeto postagem
-        let buscaPostagem = await this.findById(postagem.id);
+    // Busca a postagem pelo id da URL
+    let buscaPostagem = await this.findById(id);
 
-        // Se a postagem não existir, lace uma Exceção que vai direto para o Cliente com o status 404 Not Found
-        if (!buscaPostagem || !postagem.id) {
-            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
-        }
-       
-        if (postagem.tema) {
-             
-            let tema = await this.temaService.findById(postagem.tema.id)
-             console.log(tema);
-            if (!tema) {
-                throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
-            }
-
-        }
-
-        // Se a postagem foi encontrada, cadastra ela no BD e retorna ela
-        return await this.postagemRepository.save(postagem);
+    if (!buscaPostagem) {
+        throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
     }
+
+    // Atualiza campos básicos
+    buscaPostagem.titulo = postagem.titulo ?? buscaPostagem.titulo;
+    buscaPostagem.texto = postagem.texto ?? buscaPostagem.texto;
+
+    // Se veio um tema no body → associa
+    if (postagem.tema && postagem.tema.id) {
+
+        let tema = await this.temaService.findById(postagem.tema.id);
+
+        if (!tema) {
+            throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
+        }
+
+        // AQUI é onde realmente vincula o tema!
+        buscaPostagem.tema = tema;
+    }
+
+    // Salva tudo no banco com a relação atualizada
+    return await this.postagemRepository.save(buscaPostagem);
+}
+
 
     async delete(id: number): Promise<DeleteResult> {
 

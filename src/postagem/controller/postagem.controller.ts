@@ -39,14 +39,15 @@ export class PostagemController {
         return this.postagemService.createPostagem(postagem);
     }
 
-    // @Put() Indica que esse método lida com Requisições do Tipo Put
-    // @Body() Captura/Extrai o objeto que vem pelo Corpo da Requisição e passa para parametro do método 
-    @Put()// Usado quando queremos Atualizar alguma informação
-    @HttpCode(HttpStatus.OK) // Monta a Resposa HTTP para o Cliente com o status 200    
-    update(@Body() postagem: Postagem): Promise<Postagem> {
-       
-        return this.postagemService.updatePostagem(postagem);
-    }
+    @Put('/:id')
+@HttpCode(HttpStatus.OK)
+update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() postagem: Postagem
+): Promise<Postagem> {
+    return this.postagemService.updatePostagem(id, postagem);  
+}
+
 
     // @Delete('/:ID') Indica que esse método lida com Requisições do Tipo DELETE e que no seu endpoint será enviado um id como parametro
     // @Param captura o paramêtro envia pelo endpoint e o atribui ao parametro do método delete(id:number)
