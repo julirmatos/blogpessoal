@@ -9,11 +9,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     private _usernameField: string;
     private _passwordField: string;
 
-    constructor(private readonly authService: AuthService) {
-        super(); 
-        this._usernameField = 'usuario';
-        this._passwordField = 'senha';
+    constructor(private authService: AuthService) { // Iniciamos o método construtor
+        super({
+            usernameField: 'usuario',// usernameField é o campo que vem da PassportStrategy e indicamos quem ele se refere na nossa validação = usuario
+            passwordField: 'senha'  // passwordField é o campo que vem da PassportStrategy e indicamos quem ele se refere na nossa validação = senha
+        });
     }
+
 
     async validate(username: string, password: string): Promise<any> {
         const user = await this.authService.validateUser(username, password) // Pedimos que a validação seja feita
