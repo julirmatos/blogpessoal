@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { Bcrypt } from "./bcrypt.ts/bcrypt";
+import { Bcrypt } from "./bcrypt/bcrypt";
 
 @Module({
     imports: [],
