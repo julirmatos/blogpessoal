@@ -17,14 +17,10 @@ $ npm install
 ## Compilando o projeto
 
 ```bash
-# development
-$ npm run dev
-
 # watch mode
-$ npm run dev
+$ npm run start:dev
 
-# production mode
-$ npm run prod
+
 ```
 
 ## Descrição Atividade Blog Pessoal
