@@ -6,10 +6,7 @@ import { AuthService } from "../services/auth.service";
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
 
-    private _usernameField: string;
-    private _passwordField: string;
-
-    constructor(private authService: AuthService) { // Iniciamos o método construtor
+        constructor(private authService: AuthService) { // Iniciamos o método construtor
         super({
             usernameField: 'usuario',// usernameField é o campo que vem da PassportStrategy e indicamos quem ele se refere na nossa validação = usuario
             passwordField: 'senha'  // passwordField é o campo que vem da PassportStrategy e indicamos quem ele se refere na nossa validação = senha
