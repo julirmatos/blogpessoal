@@ -17,23 +17,16 @@ $ npm install
 ## Compilando o projeto
 
 ```bash
-# development
-$ npm run dev
-
 # watch mode
-$ npm run dev
+$ npm run start:dev
 
-# production mode
-$ npm run prod
+
 ```
 
 ## Descrição Atividade Blog Pessoal
 
-[📄 Clique aqui para abrir o PDF](https://raw.githubusercontent.com/usuario/repositorio/main/arquivo.pdf)
+[📄 Clique aqui para abrir o PDF](https://github.com/julirmatos/blogpessoal/blob/master/images/README/Blog%20Pessoal.pdf)
 
+## Ferramentas Utilizadas
 
-```bash
-# unit tests
-$ npm run test
-```
-
+[![Tecnologias e Ferramentas utilizadas:](https://skillicons.dev/icons?i=windows,ts,nodejs,npm,nestjs,mysql,vscode,github,git)](https://skillicons.dev)
