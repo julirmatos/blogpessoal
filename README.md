@@ -29,7 +29,8 @@ $ npm run prod
 
 ## Descrição Atividade Blog Pessoal
 
-![1765308348061](images/README/1765308348061.png)
+[📄 Clique aqui para abrir o PDF](https://raw.githubusercontent.com/usuario/repositorio/main/arquivo.pdf)
+
 
 ```bash
 # unit tests
