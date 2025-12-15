@@ -25,7 +25,7 @@ $ npm run start:dev
 
 ## Descrição Atividade Blog Pessoal
 
-[📄 Clique aqui para abrir o PDF](https://github.com/julirmatos/blogpessoal/blob/master/images/README/Blog%20Pessoal.pdf)
+[📄 Clique aqui para abrir o PDF](https://github.com/julirmatos/blogpessoal/blob/master/images/pdf/Blog%20Pessoal.pdf)
 
 ## Ferramentas Utilizadas
 
