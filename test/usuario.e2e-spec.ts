@@ -65,7 +65,7 @@ describe('Testes dos Módulos Usuario e Auth (e2e)', () => {
     .post("/usuarios/logar")
     .send({
       usuario: 'root@root.com',
-      senha: 'root',
+      senha: 'rootroot',
     })
     .expect(200)
 
