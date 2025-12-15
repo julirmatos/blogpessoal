@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest'; 
 import { AppModule } from '../src/app.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -65,7 +65,7 @@ describe('Testes dos Módulos Usuario e Auth (e2e)', () => {
     .post("/usuarios/logar")
     .send({
       usuario: 'root@root.com',
-      senha: 'rootroot',
+      senha: 'root',
     })
     .expect(200)
 
