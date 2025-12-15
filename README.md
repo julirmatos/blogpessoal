@@ -4,9 +4,6 @@
   </a>
 </p>
 
-## Descrição
-
-Atividade - Blog Pessoal
 
 ## Setup do Projeto
 
