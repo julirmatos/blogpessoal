@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { PostagemModule } from './postagem/postagem.module';
 import { TemaModule } from './tema/tema.module';
 import { AuthModule } from './auth/auth.module';
@@ -12,10 +15,11 @@ import { ProdService } from './data/services/prod.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Torna as variáveis de ambiente acessíveis em todo o app
+      isGlobal: true, // Torna as variáveis de ambiente acessíveis em todo o projeto
     }),
     TypeOrmModule.forRootAsync({
-      useClass: process.env.NODE_ENV === 'production' ? ProdService : DevService, // Escolhe o serviço baseado no ambiente
+      // Seleciona o serviço baseado no ambiente de produção ou desenvolvimento
+      useClass: process.env.NODE_ENV === 'production' ? ProdService : DevService,
       imports: [ConfigModule],
     }),
     PostagemModule,

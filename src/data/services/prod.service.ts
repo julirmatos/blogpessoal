@@ -6,13 +6,13 @@ export class ProdService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-      url: process.env.DATABASE_URL, // Variável que o Render fornece
+      url: process.env.DATABASE_URL, // Variável gerada automaticamente pelo Render
       logging: false,
       dropSchema: false,
       ssl: {
-        rejectUnauthorized: false, // Necessário para conexões seguras no Render
+        rejectUnauthorized: false, // Necessário para contornar restrições de certificado no Render
       },
-      synchronize: true, // Em produção real, recomenda-se usar migrations, mas para testes pode manter true
+      synchronize: true,
       autoLoadEntities: true,
     };
   }
