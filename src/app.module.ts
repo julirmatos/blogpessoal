@@ -1,35 +1,29 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Postagem } from './postagem/entities/postagem.entity';
+import { ConfigModule } from '@nestjs/config';
 import { PostagemModule } from './postagem/postagem.module';
 import { TemaModule } from './tema/tema.module';
-import { Tema } from './tema/entities/tema.entity';
 import { AuthModule } from './auth/auth.module';
-import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioModule } from './usuario/usuario.module';
 import { AppController } from './app.controller';
-import { ConfigModule } from '@nestjs/config';
-
+import { DevService } from './data/services/dev.service';
+import { ProdService } from './data/services/prod.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-  type: 'mysql',
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  entities: [Postagem, Tema, Usuario],
-  synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true, // Torna as variáveis de ambiente acessíveis em todo o app
+    }),
+    TypeOrmModule.forRootAsync({
+      useClass: process.env.NODE_ENV === 'production' ? ProdService : DevService, // Escolhe o serviço baseado no ambiente
+      imports: [ConfigModule],
     }),
     PostagemModule,
     TemaModule,
     AuthModule,
     UsuarioModule,
-    ConfigModule
   ],
   controllers: [AppController],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
