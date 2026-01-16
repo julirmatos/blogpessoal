@@ -1,31 +1,30 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { Postagem } from './postagem/entities/postagem.entity';
 import { PostagemModule } from './postagem/postagem.module';
-import { TemaModule } from './tema/tema.module';
+import { Tema } from './tema/entities/tema.entity';
+import { TemasModule } from './tema/tema.module';
 import { AuthModule } from './auth/auth.module';
+import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioModule } from './usuario/usuario.module';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
 import { DevService } from './data/services/dev.service';
 import { ProdService } from './data/services/prod.service';
 
 @Module({
   imports: [
-    // Configura o módulo de variáveis de ambiente (.env)
-    ConfigModule.forRoot({
-      isGlobal: true, 
-    }),
-    // Configuração assíncrona que escolhe entre DevService ou ProdService
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
-      useClass: process.env.NODE_ENV === 'production' ? ProdService : DevService,
+      useClass: ProdService,
       imports: [ConfigModule],
     }),
     PostagemModule,
-    TemaModule,
+    TemasModule,
     AuthModule,
-    UsuarioModule,
+    UsuarioModule
   ],
   controllers: [AppController],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

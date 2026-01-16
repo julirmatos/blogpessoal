@@ -1,15 +1,16 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Postagem } from "./entities/postagem.entity";
+import { PostagemService } from "./service/postagem.services";
 import { PostagemController } from "./controller/postagem.controller";
-import { PostagemService } from "./services/postagem.service";
-import { TemaService } from "../tema/services/tema.service"; // import { TemaService } from "../tema/services/tema.service";
-import { TemaModule } from "../tema/tema.module";
+import { TemasModule } from "../tema/tema.module";
+import { TemaService } from "../tema/services/tema.service";
+
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Postagem]), TemaModule],
+    imports: [TypeOrmModule.forFeature([Postagem]), TemasModule],
+    providers: [PostagemService],
     controllers: [PostagemController],
-    providers: [PostagemService, TemaService],
-    exports: [TypeOrmModule]
+    exports: [],
 })
 export class PostagemModule { }
