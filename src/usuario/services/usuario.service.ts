@@ -1,22 +1,18 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Usuario } from "../entities/usuario.entity";
-import { Repository } from "typeorm";
-import { Bcrypt } from "../../auth/bcrypt/bcrypt";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Usuario } from '../entities/usuario.entity';
+import { Bcrypt } from '../../auth/bcrypt/bcrypt';
 
 @Injectable()
 export class UsuarioService {
     constructor(
         @InjectRepository(Usuario)
         private usuarioRepository: Repository<Usuario>,
-        private bcrypt: Bcrypt // Injetado o arquivo Bcrypt para que possamos usar seu métodos.
+        private bcrypt: Bcrypt  // Dentro do Construtor injetamos o arquivo BCRYPT para podermos usar seus métodos
     ) { }
 
-    async findAll(): Promise<Usuario[]> {
-        return await this.usuarioRepository.find();
-    }
-
-    async findByUser(usuario: string): Promise<Usuario | null> {
+    async findByUsuario(usuario: string): Promise<Usuario | null> {
         return await this.usuarioRepository.findOne({
             where: {
                 usuario: usuario
@@ -24,33 +20,38 @@ export class UsuarioService {
         })
     }
 
+    async findAll(): Promise<Usuario[]> {
+        return await this.usuarioRepository.find();
+    }
+
     async findById(id: number): Promise<Usuario> {
         let usuario = await this.usuarioRepository.findOne({
             where: { id }
         });
 
-        if (!usuario) {
+        if (!usuario)
             throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);
-        }
 
         return usuario;
     }
 
     async create(usuario: Usuario): Promise<Usuario> {
-        let usuarioBusca = await this.findByUser(usuario.usuario);
+        let usuarioBusca = await this.findByUsuario(usuario.usuario);
 
         if (!usuarioBusca) {
-            // Criptografamos senha antes de criar usuario
-            usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
+            // Antes de cadastrar o usuario chamamos a função de Criptografia construída no arquivo bcrypt
+            usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha)
+
             return await this.usuarioRepository.save(usuario);
         }
 
-        throw new HttpException('O usuário já existe!', HttpStatus.BAD_REQUEST);
+        throw new HttpException("O Usuário ja existe!", HttpStatus.BAD_REQUEST);
+
     }
 
     async update(usuario: Usuario): Promise<Usuario> {
-        let usuarioUpdate: Usuario = await this.findById(usuario.id)
-        let usuarioBusca = await this.findByUser(usuario.usuario)
+        let usuarioUpdate: Usuario = await this.findById(usuario.id) // Função para localizar o usuario pelo ID
+        let usuarioBusca = await this.findByUsuario(usuario.usuario) // Função para localizar o usuario pelo email
 
         if (!usuarioUpdate)
             throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);

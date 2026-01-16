@@ -3,8 +3,10 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { jwtConstants } from "../constants/constants";
 
-@Injectable()
+@Injectable()   // Indica que é uma Classe de Serviço e pode ser inserida/injetada diretamente em outras classes
 export class JwtStrategy extends PassportStrategy(Strategy) {
+    // Fazemos uma herança onde JwtStrategy é a classe mãe e JwtStrategy a filha
+
     constructor() {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // Indicamos que vamos extrair o token por meio do cabeçalho da requisição

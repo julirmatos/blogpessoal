@@ -12,19 +12,19 @@ export class AuthService {
         private bcrypt: Bcrypt
     ) { }
 
+    // Método usado para validar o usuário
     async validateUser(username: string, password: string): Promise<any> {
 
-        const buscaUsuario = await this.usuarioService.findByUser(username);
+        const buscaUsuario = await this.usuarioService.findByUsuario(username)
 
-        if (!buscaUsuario) {
-            throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);
-        }
+        if (!buscaUsuario)
+            throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND)
 
         // Faz a comparação entre a senha criptografada no banco com a que está vindo pela requisição
-        const validaSenha = await this.bcrypt.compararSenhas(password, buscaUsuario.senha)
+        const matchPassword = await this.bcrypt.compararSenhas(buscaUsuario.senha, password)
 
         // Se as info estiverem corretas, entra no IF
-        if (buscaUsuario && validaSenha) {
+        if (buscaUsuario && matchPassword) {
             const { senha, ...resposta } = buscaUsuario // Desestruturamos o objeto, isto é, pegamos o que importa para nós
             return resposta
         }
@@ -41,7 +41,7 @@ export class AuthService {
             objeto criado => payload = { sub: "email@email.com"}
         */
 
-        const buscaUsuario = await this.usuarioService.findByUser(usuarioLogin.usuario)
+        const buscaUsuario = await this.usuarioService.findByUsuario(usuarioLogin.usuario)
 
         // Retorna um objeto com os dados do usuário caso o login for bem sucedido
         return {

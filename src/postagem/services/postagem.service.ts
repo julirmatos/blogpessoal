@@ -1,87 +1,127 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { DeleteResult, ILike, Repository } from "typeorm";
-import { Postagem } from "../entities/postagem.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { TemaService } from "../../tema/services/tema.service";
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, ILike, Repository } from 'typeorm';
+import { Postagem } from '../entities/postagem.entity';
+import { TemaService } from "../../tema/services/tema.service"
 
-@Injectable() // Indica que a classe é de serviço e pode ser injetada em outras classes.
+@Injectable() // classe pode ser inserida em outras classes
 export class PostagemService {
-    constructor(
-        @InjectRepository(Postagem) // Pode chamar os metodos de uma classe Repository 'INVERSÃO DE DEPENDENCIA'
-        private postagemRepository: Repository<Postagem>,
-        private temaService: TemaService
+        constructor(
+        @InjectRepository(Postagem) // Aplica a inversão de dependência a nossa classe Repository
+        private postagemRepository: Repository<Postagem>,    // Criamos um Objeto da classe Repository voltado para Postagens
+        private temaService: TemaService                    // Dentro do Construtor injetamos o temaService para podermos usar seus métodos 
     ) { }
 
-    // Função espera "await" até que tenha um retorno.
-    async findAll(): Promise<Postagem[]> { // Promise => promessa Toda função assincrona retorna uma promessa que deu certou ou errado.
+    async findAll(): Promise<Postagem[]> {
         return await this.postagemRepository.find({
-            relations: {
+            relations: {    // Indica que queremos trazer também o relacionamento
                 tema: true,
                 usuario: true
+                
             }
-        });
+        })
     }
 
-    // Metodo de procurar por ID
     async findById(id: number): Promise<Postagem> {
+        // Verifica primeiro se a postagem existe
         const postagem = await this.postagemRepository.findOne({
-            where: {
-                id
-            },
-            relations: {
+            where: { id },
+            relations: {    // Indica que queremos trazer também o relacionamento
                 tema: true,
                 usuario: true
             }
         })
 
-        if (!postagem)
-            throw new HttpException('Postagem não encontrada', HttpStatus.NOT_FOUND);
+        // Se a postagem não existir, lace uma Exceção que vai direto para o Cliente com o status 404 Not Found
+        if (!postagem) {
+            throw new HttpException('Postagem não encontrada', HttpStatus.NOT_FOUND)
+        }
 
-        return postagem;
+        // Se a postagem foi encontrada, retorna ela
+        return postagem
     }
-
-    // Buscar pelo nome do titulo
-    async findAllByTitulo(titulo: string): Promise<Postagem[]> {
+    async findByTitulo(titulo: string): Promise<Postagem[]> {
+        // Verifica se existi postagem com o parametro informado
         return await this.postagemRepository.find({
             where: {
                 titulo: ILike(`%${titulo}%`)
             },
-            relations: {
+            relations: {    // Indica que queremos trazer também o relacionamento
                 tema: true,
                 usuario: true
             }
         })
     }
+    async createPostagem(postagem: Postagem): Promise<Postagem> {
+        /*
+            {
+                "id": 1
+                "titulo": "",
+                "texto": "Texto da Postagem 3",
+                "tema": {
+                    "id": 1
+                }
+            }
+        */
 
-    // Cadastrar postagem
-    async create(postagem: Postagem): Promise<Postagem> {
         if (postagem.tema) {
+             
             let tema = await this.temaService.findById(postagem.tema.id)
-            if (!tema)
+
+            if (!tema) {
                 throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
-            return await this.postagemRepository.save(postagem);
+            }
+
         }
+
         return await this.postagemRepository.save(postagem);
     }
 
-    // Atualizar postagem
-    async update(postagem: Postagem): Promise<Postagem> {
-        let buscaPostagem: Postagem = await this.findById(postagem.id);
-        if (!buscaPostagem) {
-            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
-        }
-        if (postagem.tema) {
-            let tema = await this.temaService.findById(postagem.tema.id)
-            if (!tema)
-                throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
-            return await this.postagemRepository.save(postagem);
-        }
-        return await this.postagemRepository.save(postagem);
+
+    async updatePostagem(id: number, postagem: Postagem): Promise<Postagem> {
+
+    // Busca a postagem pelo id da URL
+    let buscaPostagem = await this.findById(id);
+
+    if (!buscaPostagem) {
+        throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
     }
 
-    // Deletar Postagem
+    // Atualiza campos básicos
+    buscaPostagem.titulo = postagem.titulo ?? buscaPostagem.titulo;
+    buscaPostagem.texto = postagem.texto ?? buscaPostagem.texto;
+
+    // Se veio um tema no body → associa
+    if (postagem.tema && postagem.tema.id) {
+
+        let tema = await this.temaService.findById(postagem.tema.id);
+
+        if (!tema) {
+            throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
+        }
+
+        // vincula o tema!
+        buscaPostagem.tema = tema;
+    }
+
+    // Salva tudo no banco com a relação atualizada
+    return await this.postagemRepository.save(buscaPostagem);
+}
+
+
     async delete(id: number): Promise<DeleteResult> {
-        await this.findById(id);
+
+        // Chama o método findById anteriro para pesquisar uma postagem pelo id extraido do objeto postagem
+        let buscaPostagem = await this.findById(id);
+
+        // Se a postagem não existir, lace uma Exceção que vai direto para o Cliente com o status 404 Not Found
+        if (!buscaPostagem)
+            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
+
+        // Se a postagem foi encontrada, apaga ela no BD e retorna uma confirmação de exclusão
         return await this.postagemRepository.delete(id);
+
     }
+   
+
 }
