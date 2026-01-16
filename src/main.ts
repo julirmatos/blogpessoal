@@ -15,7 +15,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/Blog-Pessoal-Juliana', app, document); // SwaggerModule.setup('/Blog-pessoalJuliana', app, document);
+  SwaggerModule.setup('/swagger', app, document); // SwaggerModule.setup('/Blog-pessoalJuliana', app, document);
 
   // Configuração do fuso horário
   process.env.TZ = '-03:00';
