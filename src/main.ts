@@ -14,7 +14,11 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
+<<<<<<< HEAD
   SwaggerModule.setup('/swagger', app, document);
+=======
+  SwaggerModule.setup('/Blog-Pessoal-Juliana', app, document); // SwaggerModule.setup('/Blog-pessoalJuliana', app, document);
+>>>>>>> parent of 34353c9 (ajustes  de deploy)
 
   process.env.TZ = '-03:00';
 
