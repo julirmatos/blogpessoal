@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsEmail, IsNotEmpty, MinLength } from "class-validator"
+import { IsEmail, IsNotEmpty, MinLength, IsString, IsOptional } from "class-validator" // Adicionado IsString e IsOptional
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Postagem } from "../../postagem/entities/postagem.entity"
 
@@ -27,11 +27,13 @@ export class Usuario {
     @ApiProperty() 
     senha: string
 
-    @Column({length: 5000 }) 
+    @IsString()      // Adicionado: valida que o conteúdo é uma string
+    @IsOptional()    // Adicionado: permite que o campo seja enviado ou não no JSON
+    @Column({length: 5000, nullable: true }) // Adicionado nullable para consistência
     @ApiProperty() 
     foto: string
 
-    @ApiProperty() 
+    @ApiProperty({ type: () => Postagem, isArray: true }) 
     @OneToMany(() => Postagem, (postagem) => postagem.usuario)
     postagem: Postagem[]
 
