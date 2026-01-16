@@ -6,7 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Configuração do Swagger
+  // Indicamos a configuração do Swagger
   const config = new DocumentBuilder()
     .setTitle('Blog Pessoal')
     .setDescription('Projeto Blog Pessoal')
@@ -14,29 +14,21 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/swagger', app, document);
 
-  SwaggerModule.setup('/swagger', app, document); // SwaggerModule.setup('/Blog-pessoalJuliana', app, document);
-
-  // Configuração do fuso horário
+  // Ajustando o Fuso Horário do BD
   process.env.TZ = '-03:00';
 
-  // Pipes de validação global
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-  }));
+  // Aplicando os recursos de validação
+  app.useGlobalPipes(new ValidationPipe());
 
-  // Habilita o CORS para permitir requisições do Front-end
+  // Habilitando o CORS do projeto
   app.enableCors();
 
-  // O Render define automaticamente a variável PORT. 
-  // Usar 0.0.0.0 como host é uma boa prática em deploys Docker/Cloud para garantir acessibilidade externa.
-  const port = process.env.PORT || 4000;
-  await app.listen(port, '0.0.0.0');
-  
-  console.log(`Aplicação rodando na porta: ${port}`);
+  // Indico qual porta o projeto está sendo executado
+  await app.listen(4000);
 }
 
 bootstrap();
