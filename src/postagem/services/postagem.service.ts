@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { DeleteResult, ILike, Repository } from "typeorm";
 import { Postagem } from "../entities/postagem.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { TemaService } from "../../temas/services/tema.service";
+import { TemaService } from "../../tema/services/tema.service";
 
 /*
     @Injectable: Indica que é uma Classe de Serviço e pode ser inserida/injetada 
